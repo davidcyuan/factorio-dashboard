@@ -32,15 +32,15 @@ def init_db():
     conn.close()
 
 
-def log_production(product_name, quantity, assembler_id=None, utilization_rate=None, defect_count=0, lead_time=None):
+def log_production(product_name, timestamp, quantity, assembler_id=None, utilization_rate=None, defect_count=0, lead_time=None):
     """Log a production entry."""
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
-        INSERT INTO production_log (product_name, quantity, assembler_id, utilization_rate, defect_count, lead_time)
-        VALUES (?, ?, ?, ?, ?, ?)
-    """, (product_name, quantity, assembler_id, utilization_rate, defect_count, lead_time))
+        INSERT INTO production_log (product_name, timestamp, quantity, assembler_id, utilization_rate, defect_count, lead_time)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    """, (product_name, timestamp, quantity, assembler_id, utilization_rate, defect_count, lead_time))
 
     conn.commit()
     conn.close()
@@ -55,6 +55,13 @@ def get_all_logs():
     conn.close()
     return rows
 
+def get_logs_by_product(product_name):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM production_log WHERE product_name = ? ORDER BY timestamp DESC", (product_name,))
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
 
 def clear_logs():
     """Clear all production logs (for testing/reset)."""

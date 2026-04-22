@@ -22,7 +22,7 @@ def generate_data():
         assembler_id = random.choice(MACHINES)
         defect_count = random.randint(0, 5)
         lead_time = random.uniform(0.5, 5)
-        log_production(product_name=product_name, quantity=quantity, assembler_id=assembler_id,
+        log_production(product_name=product_name, timestamp=cur_time, quantity=quantity, assembler_id=assembler_id,
             utilization_rate=utilization_rate, defect_count=defect_count,lead_time=lead_time)
 
         cur_time += timedelta(minutes=INTERVAL_MINUTES)
